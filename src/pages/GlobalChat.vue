@@ -8,26 +8,32 @@ export default {
 </script>
 
 <template>
-  <AppH1>Chat general</AppH1>
+  <div class="container mx-auto px-4 py-6 bg-gray-900 text-gray-200">
+    <AppH1 class="text-indigo-300 font-bold">Chat general</AppH1>
 
-  <div class="flex gap-4">
-    <section class="w-9/12 h-100 p-4 border border-gray-200 rounded">
-      <h2 class="sr-only">Lista de mensajes</h2>
-      <!-- Acá va la lista de mensajes -->
-    </section>
-    <section class="w-3/12">
-      <h2 class="mb-4 text-xl">Enviar un mensaje</h2>
-      <form action="#">
-        <div class="mb-4">
-          <label for="email" class="block mb-1">Email</label>
-          <input type="email" id="email" class="w-full p-2 border border-gray-300 rounded">
+    <div class="flex flex-col md:flex-row gap-6">
+      <section class="w-full md:w-9/12 p-6 bg-gray-800 shadow-lg rounded-lg border border-gray-700">
+        <h2 class="sr-only">Lista de mensajes</h2>
+        <!-- Acá va la lista de mensajes -->
+        <div class="h-96 flex items-center justify-center text-gray-500">
+          <p class="text-lg italic">No hay mensajes aún...</p>
         </div>
-        <div class="mb-4">
-          <label for="content" class="block mb-1">Mensaje</label>
-          <textarea id="content" class="w-full p-2 border border-gray-300 rounded"></textarea>
-        </div>
-        <button type="submit" class="transition px-4 py-2 rounded bg-blue-600 hover:bg-blue-500 focus:bg-blue-500 active:bg-blue-700 text-white">Enviar</button>
-      </form>
-    </section>
+      </section>
+      
+      <section class="w-full md:w-3/12 bg-gray-800 p-6 shadow-lg rounded-lg border border-gray-700">
+        <h2 class="mb-4 text-xl font-semibold text-indigo-300">Enviar un mensaje</h2>
+        <form action="#">
+          <div class="mb-4">
+            <label for="email" class="block mb-2 text-indigo-200 font-medium">Email</label>
+            <input type="email" id="email" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+          </div>
+          <div class="mb-4">
+            <label for="content" class="block mb-2 text-indigo-200 font-medium">Mensaje</label>
+            <textarea id="content" rows="4" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+          </div>
+          <button type="submit" class="w-full md:w-auto px-6 py-3 rounded-md bg-indigo-600 hover:bg-indigo-500 focus:bg-indigo-500 active:bg-indigo-700 text-white font-medium transition-colors duration-200 shadow-sm">Enviar</button>
+        </form>
+      </section>
+    </div>
   </div>
 </template>
