@@ -1,31 +1,12 @@
 <script>
 import AppH1 from "../components/AppH1.vue";
-
+import { supabase } from '../services/supabase';
 export default {
   name: "GlobalChat",
   components: {AppH1},
   data() {
     return {
-      messages: [
-        {
-          id: 1,
-          email: "juan@mail.com",
-          content: "Hola a todos!",
-          created_at: new Date(),
-        },
-        {
-          id: 2,
-          email: "ana@mail.com",
-          content: "Buenos días, ¿cómo están?",
-          created_at: new Date(),
-        },
-        {
-          id: 3,
-          email: "carlos@mail.com",
-          content: "Feliz de unirme al chat!",
-          created_at: new Date(),
-        },
-      ],
+      messages: [],
       newMessage: {
         email: "",
         content: "",
@@ -44,6 +25,16 @@ export default {
       this.newMessage.content = '';
     },
   },
+  async mounted() {
+    const {data, error} = await supabase
+      .from('global_chat_messages')
+      .select();
+    if (error) {
+      throw new Error(error);
+    }
+
+    this.messages = data;
+  }
 };
 </script>
 
