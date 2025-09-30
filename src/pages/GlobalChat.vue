@@ -1,59 +1,52 @@
 <script>
-import AppH1 from "../components/AppH1.vue";
-import { supabase } from '../services/supabase';
+import AppH1 from '../components/AppH1.vue';
+import {
+  fetchLastGlobalChatMessages,
+  sendGlobalChatMessage,
+  subscribeToNewGlobalChatMessages
+} from '../services/global-chat';
+
 export default {
-  name: "GlobalChat",
-  components: {AppH1},
+  name: 'GlobalChat',
+  components: {AppH1,},
+
   data() {
     return {
       messages: [],
       newMessage: {
-        email: "",
-        content: "",
-      },
-    };
+        email: '',
+        content: '',
+      }
+    }
   },
   methods: {
     async handleSubmit() {
-     const {data, error} = await supabase
-       .from('global_chat_messages')
-       .insert({
-         email: this.newMessage.email,
-         content: this.newMessage.content,
-       });
-      if (error) {
-        console.error('[GlobalChat] Error al enviar el mensaje', error);
-        return;
+      try {
+        await sendGlobalChatMessage({
+          email: this.newMessage.email,
+          content: this.newMessage.content,
+        });
+      } catch (error) {
+        // TODO...
       }
+
       this.newMessage.content = '';
-    },
+    }
   },
   async mounted() {
-    const { data, error } = await supabase
-      .from('global_chat_messages')
-      .select();
-    if(error) {
-      console.error('[global-chat.js sendGlobalChatMessage] Error al enviar el nuevo mensaje.', error);
-      throw new Error(error.message);
-    }
-    this.messages = data;
+    subscribeToNewGlobalChatMessages(async newMessage => {
+      this.messages.push(newMessage);
 
+      await this.$nextTick();
+      this.$refs.chatContainer.scrollTop = this.$refs.chatContainer.scrollHeight;
 
-    const chatChannel = supabase.channel('global_chat_messages');
-    chatChannel.on(
-      'postgres_changes',
-      {
-        event: 'INSERT',
-        table: 'global_chat_messages',
-        schema: 'public',
-      },
-      payload => {
-           this.messages.push(payload.new);
-      }
-    );
-    chatChannel.subscribe();
+    });
+    this.messages = await fetchLastGlobalChatMessages();
+
+    await this.$nextTick();
+    this.$refs.chatContainer.scrollTop = this.$refs.chatContainer.scrollHeight;
   }
-};
+}
 </script>
 
 <template>
@@ -61,7 +54,7 @@ export default {
     <AppH1 class="text-indigo-300 font-bold">Chat general</AppH1>
 
     <div class="flex flex-col md:flex-row gap-6">
-      <section class="overflow-y-auto w-9/12 h-100 p-6 bg-gray-800 shadow-lg rounded-lg border border-gray-700">
+      <section class="overflow-y-auto w-9/12 h-100 p-6 bg-gray-800 shadow-lg rounded-lg border border-gray-700" ref="chatContainer">
         <h2 class="sr-only">Lista de mensajes</h2>
         <ol class="flex flex-col items-start gap-4">
           <li
