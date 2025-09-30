@@ -14,26 +14,44 @@ export default {
     };
   },
   methods: {
-    handleSubmit() {
-      this.messages.push({
-          id: this.messages.length,
-          email: this.newMessage.email,
-          content: this.newMessage.content,
-          created_at: new Date(),
-        },
-      )
+    async handleSubmit() {
+     const {data, error} = await supabase
+       .from('global_chat_messages')
+       .insert({
+         email: this.newMessage.email,
+         content: this.newMessage.content,
+       });
+      if (error) {
+        console.error('[GlobalChat] Error al enviar el mensaje', error);
+        return;
+      }
       this.newMessage.content = '';
     },
   },
   async mounted() {
-    const {data, error} = await supabase
+    const { data, error } = await supabase
       .from('global_chat_messages')
       .select();
-    if (error) {
-      throw new Error(error);
+    if(error) {
+      console.error('[global-chat.js sendGlobalChatMessage] Error al enviar el nuevo mensaje.', error);
+      throw new Error(error.message);
     }
-
     this.messages = data;
+
+
+    const chatChannel = supabase.channel('global_chat_messages');
+    chatChannel.on(
+      'postgres_changes',
+      {
+        event: 'INSERT',
+        table: 'global_chat_messages',
+        schema: 'public',
+      },
+      payload => {
+           this.messages.push(payload.new);
+      }
+    );
+    chatChannel.subscribe();
   }
 };
 </script>
