@@ -13,7 +13,7 @@ export default {
 <template>
     <div class="flex flex-col min-h-screen bg-gray-900">
         <AppNavbar />
-        <main class="container p-6 mx-auto flex-grow text-gray-200">
+        <main class="container p-6 mx-auto flex-grow ">
             <!-- 
             RouterView es donde se va a montar el componente asociar a la ruta que se
             esté visitando.
