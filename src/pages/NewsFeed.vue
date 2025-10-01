@@ -42,16 +42,33 @@ export default {
 </script>
 <template>
   <div class="p-6">
+    <AppH1 class="text-indigo-300 font-bold">Noticias</AppH1>
     <!-- Formulario -->
-    <form class="mb-6 space-y-4 text-gray-200" @submit.prevent="handleSubmit">
-      <input v-model="newNoticias.title" class="border p-2 w-full rounded" placeholder="Título"
-             required type="text"/>
-      <input v-model="newNoticias.synopsis" class="border p-2 w-full rounded" placeholder="Sinopsis"
-             required type="text"/>
-      <textarea v-model="newNoticias.body" class="border p-2 w-full rounded"
-                placeholder="Texto completo" required></textarea>
-      <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-              type="submit">
+    <form class="mb-6 space-y-4 text-gray-200 bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700"
+          @submit.prevent="handleSubmit">
+      <div class="space-y-2">
+        <label for="title" class="block text-indigo-200 font-medium">Título</label>
+        <input id="title" v-model="newNoticias.title"
+               class="w-full p-3 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+               placeholder="Título"
+               required type="text"/>
+      </div>
+      <div class="space-y-2">
+        <label for="synopsis" class="block text-indigo-200 font-medium">Sinopsis</label>
+        <input id="synopsis" v-model="newNoticias.synopsis"
+               class="w-full p-3 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+               placeholder="Sinopsis"
+               required type="text"/>
+      </div>
+      <div class="space-y-2">
+        <label for="body" class="block text-indigo-200 font-medium">Texto completo</label>
+        <textarea id="body" v-model="newNoticias.body"
+                  class="w-full p-3 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  placeholder="Texto completo" required rows="4"></textarea>
+      </div>
+      <button
+        class="w-full px-6 py-3 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-200"
+        type="submit">
         Publicar
       </button>
     </form>
